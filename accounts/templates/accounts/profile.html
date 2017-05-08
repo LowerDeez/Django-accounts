@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+   Profile
+{% endblock %}
+
+{% block content %}
+<div class="profile">
+    <div class="page-header" style="margin-top: 0">
+        <h1>Profile</h1>
+    </div>
+    <div class="row" style="font-size: 16px;">
+            <p>Username: {{ user }}</p>
+            <p>First name: {{ user.first_name }}</p>
+            <p>Last name: {{ user.last_name }}</p>
+            <p>Email: {{ user.email }}</p>
+            <p>Description: {{ user.userprofile.description }}</p>
+            <img src="{{ user.userprofile.get_picture }}" class="picture img-thumbnail" style="width: 200px; height: auto">
+            <ul style="list-style-type: none; margin-top: 10px; padding: 0">
+              {% if user.userprofile.role %}
+              <li><span class="glyphicon glyphicon-briefcase"></span> {{ user.userprofile.role }}</li>
+              {% endif %}
+              {% if user.userprofile.city %}
+              <li><span class="glyphicon glyphicon-map-marker"></span> {{ user.userprofile.city }}</li>
+              {% endif %}
+              {% if user.userprofile.website %}
+              <li><span class="glyphicon glyphicon-globe"></span> <a href="{{ user.userprofile.website }}" target="_blank">{{ user.userprofile.website }}</a></li>
+              {% endif %}
+            </ul>
+    </div>
+</div>
+{% endblock %}

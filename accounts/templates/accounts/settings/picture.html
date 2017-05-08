@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+
+{% load static %}
+
+{% block title %}
+   Profile
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+
+  $(document).on('change', ':file', function() {
+    var input = $(this),
+        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.trigger('fileselect', [numFiles, label]);
+  });
+
+  // We can watch for our custom `fileselect` event like this
+  $(document).ready( function() {
+      $(':file').on('fileselect', function(event, numFiles, label) {
+
+          var input = $(this).parents('.input-group').find(':text'),
+              log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+          if( input.length ) {
+              input.val(log);
+          } else {
+              if( log ) alert(log);
+          }
+
+      });
+  });
+
+</script>
+<script src="{% static 'accounts/js/cropper.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="page-header" style="margin-top: 0">
+    <h1>Profile</h1>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        {% include 'accounts/partial/part_settings_menu.html' with active='picture' %}
+    </div>
+    <div class="col-sm-9 form">
+
+        {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+          <h3 style="margin-top: 0">Change Picture</h3>
+          <img src="{{ user.userprofile.get_picture }}" style="width: 350px; border-radius: 5px; margin-bottom: 1em;">
+
+          <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <span class="btn btn-default btn-file">
+                Browse <input type="file" name="myfile">
+            </span>
+            <button type="submit" class="btn btn-default">Upload new picture</button>
+          </form>
+
+
+        <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <label class="input-group-btn">
+                    <span class="btn btn-default btn-file">
+                        Browse&hellip; <input name="myfile" type="file" style="display: none;" multiple>
+                    </span>
+                </label>
+                <input type="text" class="form-control" readonly style="width: 50%">
+            </div>
+            <button type="submit" class="btn btn-default">Upload new picture</button>
+
+        </form>
+
+
+<!--        <form method="post" class="form">
+        {%csrf_token%}
+
+        {% include 'accounts/partial/partial_form_fields.html' %}
+
+        <div class="form-group" style="margin-top: 20px">
+          <button type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-ok"></span> Ok
+          </button>
+          <a href="{% url 'account:home' %}" class="btn btn-default">Cancel</a>
+        </div>
+
+      </form>-->
+
+
+    </div>
+</div>
+{% endblock %}

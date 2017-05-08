@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <h1>Register</h1>
+
+      <form class="form" method="post">
+        {%csrf_token%}
+
+        {% include 'accounts/partial/partial_form_fields.html' %}
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-ok"></span> Save
+          </button>
+          <a href="{% url 'account:home' %}" class="btn btn-default">Cancel</a>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

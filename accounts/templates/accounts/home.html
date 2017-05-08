@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Home
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-8">
+        <h1>Welcome!</h1>
+    </div>
+    <div class="col-md-4">
+    <h3>Users list:</h3>
+        {% for user in users %}
+            <a href="{% url 'account:profile' user.username %}">
+                <h5 style="display: inline-block; margin-right: 5px;">{{ user.username }}</h5>
+                {% if user not in friends or not friends %}
+                    <a class="btn btn-success btn-sm" href="{% url 'account:change_friends' operation='add' pk=user.pk %}">
+                        Add Friend
+                    </a>
+                {% endif %}
+            </a><hr/>
+        {% endfor %}
+    <h3>Friends:</h3>
+        {% for friend in friends %}
+            <a href="{% url 'account:profile' friend.username %}">
+                <h5 style="display: inline-block; margin-right: 5px;">{{ friend.username }}</h5>
+                <a class="btn btn-danger btn-sm" href="{% url 'account:change_friends' operation='remove' pk=friend.pk %}">
+                    Remove Friend
+                </a>
+            </a><hr/>
+        {% endfor %}
+    <h3>Friends request:</h3>
+        {% for friend in friends_request %}
+            <a href="{% url 'account:profile' friend.username %}">
+                <h5 style="display: inline-block; margin-right: 5px;">{{ friend.username }}</h5>
+                <a class="btn btn-info btn-sm" href="{% url 'account:change_friends' operation='add' pk=friend.pk %}">
+                    Accept Friend
+                </a>
+            </a><hr/>
+        {% endfor %}
+    </div>
+{% endblock %}
